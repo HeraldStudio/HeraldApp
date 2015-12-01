@@ -22,7 +22,7 @@ angular.module('HeraldApp.services',[])
 
     this.login = function(username,password) {
         data = {
-            'user':username,
+            'user_phone':username,
             'password':password
         }
         loginDefer = $q.defer();
@@ -57,6 +57,14 @@ angular.module('HeraldApp.services',[])
             template:message,
             noBackdrop:true,
             duration:2000
+        });
+    }
+
+    this.MessageShow = function(message,time){
+        $ionicLoading.show({
+            template:message,
+            noBackdrop:true,
+            duration:time
         });
     }
     

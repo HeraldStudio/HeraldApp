@@ -1,5 +1,6 @@
 angular.module('HeraldApp')
-.controller('LoginCtrl', ['User','$scope','$log','MessageShow',function(User,$scope,$log,MessageShow){
+.controller('LoginCtrl', ['User','$scope','$log','MessageShow','$state',
+		function(User,$scope,$log,MessageShow,$state){
 	$scope.testValue="";
 	$scope.login_username="wrong";
 	$scope.formData = {
@@ -31,9 +32,16 @@ angular.module('HeraldApp')
 					$log.debug(response)
 					if(response){
 						$scope.error_message = response;
+					} else {
+						MessageShow.MessageShow("登录成功",1000);
+						setTimeout(function(){
+							$state.go('index.home');
+						},1000)
+						
 					}
+
 				},function(error){
-					MessageShow.errorShow("网络错误");
+					MessageShow.MessageShow("网络错误",1000);
 				})
 		}
 	}
