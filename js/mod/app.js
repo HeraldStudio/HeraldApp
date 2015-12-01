@@ -33,6 +33,13 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
                 }
             }
         })
+    //login
+    .state(
+        "login",{
+            url:"/login",
+            templateUrl:"pages/auth/login.html",
+            controller:"LoginCtrl"
+        })
     //yuyue
     .state(
         "yuyue",{

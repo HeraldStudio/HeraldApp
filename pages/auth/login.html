@@ -1,0 +1,20 @@
+<ion-view>
+	<div class="bar bar-header bar-positive">
+	      <a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
+	      <h1 class="title">登录</h1>
+	</div>
+	<ion-content class="has-header">
+		<form name="userForm" ng-submit="login(userForm.$valid)" novalidate>
+			<label class="item item-input">
+				<input type="text" name="name" placeholder="一卡通号" ng-model="formData.login_username" required>
+			</label>
+
+			<label class="item item-input">
+				<input type="password" name="pwd" placeholder="密码" ng-model="formData.login_password" required>
+			</label>
+			<span ng-show="error_message"><br>{{error_message}}</span>
+			<button class="button button-full button-positive" type="submit">登录</button>
+		</form>
+		
+	</ion-content>
+</ion-view>
