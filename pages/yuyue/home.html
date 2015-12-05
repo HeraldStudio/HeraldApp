@@ -1,8 +1,38 @@
 
 <ion-view>
-    <ion-content class="has-header">
-        <div hello-world>
-            <p>hello</p>
-        </div>
-    </ion-content>
+        <ion-tabs class="tabs-top tabs-stable tabs-color-positive">
+			<ion-tab title="{{dateInfo['today']['weekInfo']}}">
+				<ion-view>
+					<ion-content>
+						<ion-list>
+							<ion-item ng-repeat="(key,value) in typeInfo">
+								<p>{{value['name']}}</p>
+							</ion-item>
+						</ion-list>
+					</ion-content>
+				</ion-view>
+			</ion-tab>
+			<ion-tab title="{{dateInfo['tomorrow']['weekInfo']}}">
+				<ion-view>
+					<ion-content>
+						<ion-list>
+							<ion-item ng-repeat="(key,value) in typeInfo">
+								<p>{{value['name']}}</p>
+							</ion-item>
+						</ion-list>
+					</ion-content>
+				</ion-view>
+			</ion-tab>
+			<ion-tab title="{{dateInfo['afterTomo']['weekInfo']}}">
+				<ion-view>
+					<ion-content>
+						<ion-list>
+							<ion-item ng-repeat="(key,value) in typeInfo">
+								<p>{{value['name']}}</p>
+							</ion-item>
+						</ion-list>
+					</ion-content>
+				</ion-view>
+			</ion-tab>
+        </ion-tabs>
 </ion-view>

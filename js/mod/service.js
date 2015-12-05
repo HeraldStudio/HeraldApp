@@ -19,6 +19,7 @@ angular.module('HeraldApp.services',[])
 .service('User', ['Storage','callApi','$q','$log', function(Storage,callApi,$q,$log){
     var storageKey = 'user';
     var user = Storage.get(storageKey) || {}
+    $log.debug("service start")
 
     this.login = function(username,password) {
         data = {
@@ -61,6 +62,7 @@ angular.module('HeraldApp.services',[])
     }
 
     this.MessageShow = function(message,time){
+        var time = time|2000;
         $ionicLoading.show({
             template:message,
             noBackdrop:true,
@@ -71,11 +73,11 @@ angular.module('HeraldApp.services',[])
 }])
 .service('callApi', ['$http','ENV','$q','$log', function($http,ENV,$q,$log){
     var i = 1;
-    $log.debug(ionic.Platform)
+    // $log.debug(ionic.Platform)
     this.namedata = function(){
         return i;
     }
-    var deferred = $q.defer();
+    
 
     /**
     * 获取后台数据这个地方很多点需要注意：
@@ -97,15 +99,21 @@ angular.module('HeraldApp.services',[])
     * data是传入的数据，type仅对post方式有效，分为0：arg，1：body
     */
 
-    this.getData = function(url,method,data,type){
+    this.getData = function(url,method,data,token,type){
+        var deferred = $q.defer();
         var final_url = ENV.api+url;//+'?&callback=JSON_CALLBACK';
         data = data || null;
         type = type || null;
         var config = {
             method:method,
             url:final_url,
+            headers:{
+                'token':token,
+                // 'Content-Type':'application/x-www-form-urlencoded'
+            },
             timeout:5000
         }
+        // $http.defaults.headers.common['Token'] = token;
         if(method=="GET"){
             config['params'] = data;
         }
@@ -119,7 +127,11 @@ angular.module('HeraldApp.services',[])
                 return str.join("&");
                 }
             }
-            config['headers'] = {'Content-Type': 'application/x-www-form-urlencoded'};
+            config['headers']['Content-Type'] = 'application/x-www-form-urlencoded';
+            // config['headers'] = {
+            //     'Content-Type':'application/x-www-form-urlencoded',
+            //     // 'Token':1
+            // };
             config['data'] = data;
         }
         $http(config).success(function(data){

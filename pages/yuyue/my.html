@@ -1,10 +1,19 @@
 <ion-view>
-    <ion-content class="has-header">
-    <p>my html</p>
-    <p>{{namedata()}}</p>
-    <button ng-click="testSet()">set</button>
-    <!-- <p>{{testGet()}}</p> -->
-    <button ng-click="testApi()">aa</button>
+    <ion-content class="has-header" direction="y">
+		    <ion-list>
+		    	<ion-item class="myorder_item" ng-repeat="item in Myorder['content']['rows']">
+			    	<div class="row">
+			    		<p class="col">{{item['itemName']}}</p>
+			    		<p class="col">{{item['floorName']}}</p>
+			    	</div>
+			    	<div class="row">
+			    		<p class="col">{{item['useDate']}}</p>
+			    		<p class="col">{{stateContent[item['state']]}}</p>
+			    	</div>
+		    	</ion-item>
+		    	
+		    </ion-list>
+		    </div>
     </ion-content>
 
 </ion-view>
