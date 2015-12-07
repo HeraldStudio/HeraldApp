@@ -122,8 +122,14 @@ angular.module('HeraldApp.services',[])
                 
                 config['transformRequest'] = function(obj){
                 var str = [];
-                for(var p in obj)
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                for(var p in obj){
+                    if(p!="data"){
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    } else {
+                        console.log(JSON.stringify(obj[p]));
+                        str.push(encodeURIComponent(p) + "=" + JSON.stringify(obj[p]));
+                    }
+                }
                 return str.join("&");
                 }
             }

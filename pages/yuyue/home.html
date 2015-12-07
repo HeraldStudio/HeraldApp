@@ -5,9 +5,22 @@
 				<ion-view>
 					<ion-content>
 						<ion-list>
-							<ion-item ng-repeat="(key,value) in typeInfo">
-								<p>{{value['name']}}</p>
-							</ion-item>
+							<div ng-repeat="(key,value) in typeInfo">
+								
+								<ion-item class="item-icon-right" ng-click="toggleGroup('today',key)">
+									{{value['name']}}
+									<i class="coll-right icon ion-chevron-right " style="font-size:15px;"></i>
+								</ion-item>
+								<div ng-show="isToggleGroup('today',key)">
+									<ion-item  ng-repeat="item in orderInfo['today'][key]" class="order_item">
+										<div class="row">
+											<p class="col">{{item["avaliTime"]}}</p>
+											<p class="col">{{item["used"]}}/{{item["all"]}}</p>
+											<button class="col button button-small button-positive" disabled="{{item['enable']}}" >预约</button>
+										</div>
+									</ion-item>
+								</div>
+							</div>
 						</ion-list>
 					</ion-content>
 				</ion-view>
@@ -16,9 +29,23 @@
 				<ion-view>
 					<ion-content>
 						<ion-list>
-							<ion-item ng-repeat="(key,value) in typeInfo">
-								<p>{{value['name']}}</p>
-							</ion-item>
+							<div ng-repeat="(key,value) in typeInfo">
+								
+								<ion-item class="item-icon-right" ng-click="toggleGroup('tomorrow',key)">
+									{{value['name']}}
+									<i class=" coll-right icon ion-chevron-right" style="font-size:15px;"></i>
+								</ion-item>
+								<div ng-show="isToggleGroup('tomorrow',key)">
+									<ion-item  ng-repeat="item in orderInfo['tomorrow'][key]">
+										<div class="row">
+											<p class="col">{{item["avaliTime"]}}</p>
+											<p class="col">{{item["used"]}}/{{item["all"]}}</p>
+											<button class="col button button-small button-positive" disabled="{{item['enable']}}" >预约</button>
+										</div>
+									</ion-item>
+								</div>
+
+							</div>
 						</ion-list>
 					</ion-content>
 				</ion-view>
@@ -27,9 +54,23 @@
 				<ion-view>
 					<ion-content>
 						<ion-list>
-							<ion-item ng-repeat="(key,value) in typeInfo">
-								<p>{{value['name']}}</p>
-							</ion-item>
+							<div ng-repeat="(key,value) in typeInfo">
+								
+								<ion-item class="item-icon-right" ng-click="toggleGroup('afterTomo',key)">
+									{{value['name']}}
+									<i class="icon ion-chevron-right coll-right" style="font-size:15px;"></i>
+								</ion-item>
+								<div ng-show="isToggleGroup('afterTomo',key)">
+									<ion-item  ng-repeat="item in orderInfo['afterTomo'][key]">
+										<div class="row">
+											<p class="col">{{item["avaliTime"]}}</p>
+											<p class="col">{{item["used"]}}/{{item["all"]}}</p>
+											<button class="col button button-small button-positive" disabled="{{item['enable']}}" >预约</button>
+										</div>
+									</ion-item>
+								</div>
+
+							</div>
 						</ion-list>
 					</ion-content>
 				</ion-view>
