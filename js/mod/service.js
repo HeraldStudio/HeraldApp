@@ -43,6 +43,29 @@ angular.module('HeraldApp.services',[])
         return loginDefer.promise;
     };
 
+    this.register = function(username,password,cardnum,cardpwd){
+        data = {
+            'phone':username,
+            'password':password,
+            'cardnumber':cardnum,
+            'card_password':cardpwd
+        }
+        registerDefer = $q.defer();
+        callApi.getData('/auth/reg','POST',data)
+            .then(function(response){
+                if(response.code == 200){
+                    user.token = response.content;
+                    Storage.set(storageKey,user);
+                    registerDefer.resolve(null);
+                } else {
+                    registerDefer.resolve(response.content);
+                }
+            },function(response){
+                registerDefer.reject(response);
+            });
+        return registerDefer.promise;
+
+    }
     this.logout = function() {
         Storage.remove(storageKey);
     }

@@ -40,6 +40,13 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
             templateUrl:"pages/auth/login.html",
             controller:"LoginCtrl"
         })
+    //register
+    .state(
+        "register",{
+            url:"/register",
+            templateUrl:"pages/auth/register.html",
+            controller:"registerCtrl"
+        })
     //yuyue
     .state(
         "yuyue",{
