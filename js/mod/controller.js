@@ -7,7 +7,7 @@ angular.module('HeraldApp')
     $scope.slide_item=[
             {'slideimg':"./img/index/slide1.jpg"},
             {'slideimg':"./img/index/slide2.jpg"},
-            {'slideimg':"./img/index/slide1.jpg"}
+            {'slideimg':"./img/index/slide2.jpg"},
         ];
     // $scope.testurl = "./img/index/slide1.jpg";
 }])

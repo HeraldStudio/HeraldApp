@@ -1,10 +1,12 @@
 angular.module('HeraldApp')
-.controller('LoginCtrl', ['User','$scope','$log','MessageShow','$state',
-		function(User,$scope,$log,MessageShow,$state){
+.controller('LoginCtrl', ['User','$scope','$log','MessageShow','$state','$stateParams','$rootScope',
+		function(User,$scope,$log,MessageShow,$state,$stateParams,$rootScope){
 	$scope.formData = {
 		'login_username':'',
 		'login_password':''
 	};
+	var laststate = $rootScope.lastState||"index.home";
+	console.log(laststate);
 
 	var check_dormData = function(formData){
 		if(formData.login_username.length < 1){
@@ -32,9 +34,7 @@ angular.module('HeraldApp')
 						$scope.error_message = response;
 					} else {
 						MessageShow.MessageShow("登录成功",1000);
-						setTimeout(function(){
-							$state.go('index.home');
-						},1000)
+							$state.transitionTo(laststate, {},{reload: true, notify:true});
 						
 					}
 

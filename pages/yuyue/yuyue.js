@@ -1,8 +1,25 @@
 angular.module('HeraldApp')
-.controller('yuyueCtrl', ['$scope','callApi','$ionicLoading','Storage','User','MessageShow','$http',
-    function($scope,callApi,$ionicLoading,Storage,User,MessageShow,$http){
+.controller('yuyueBeforeCtrl', ['$state','User','$rootScope', 'MessageShow',function($state,User,$rootScope,MessageShow){
+    var user = User.getCurrentUser();
+    console.log("yuyueBefore start");
+    if (user.token){
+        $rootScope.user = user;
+        console.log("current user");
+        console.log(user)
+    } else {
+        MessageShow.MessageShow("请先登录",1000);
+        $rootScope.lastState = "yuyue.home";
+        $state.go('login');
+    }
+}])
+/*
+*可预约信息
+*/
+.controller('yuyueCtrl', ['$scope','callApi','$ionicLoading','User','MessageShow',
+    '$http','$state','yuyueService','$rootScope',
+    function($scope,callApi,$ionicLoading,User,MessageShow,$http,$state,yuyueService,$rootScope){
 
-    console.log('yuyue');
+    console.log('yuyue home start');
     var allUrl = {
         'getDateUrl':{
             'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/initOrderIndexP.do?sclId=1',
@@ -14,6 +31,10 @@ angular.module('HeraldApp')
         },
         'getOrderInfoUrl':{
             'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/phoneOrder/getOrderInfoP.do',
+            'method':'GET'
+        },
+        'judgeOrderUrl':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/judgeOrderP.do',
             'method':'GET'
         }
     };
@@ -59,7 +80,7 @@ angular.module('HeraldApp')
     }
 
     var user = User.getCurrentUser();
-    console.log(user)
+   
     /*
     *获取标题栏的日期信息
     */
@@ -95,6 +116,7 @@ angular.module('HeraldApp')
                 "weekInfo":data['timeList'][2]['dayInfo'].split(' ')[1]
             }
         }
+        console.log("dateinfo:")
         console.log(dateInfo);
         $scope.dateInfo = dateInfo;
     }
@@ -143,8 +165,9 @@ angular.module('HeraldApp')
             }
             orderInfoCtrl[day][itemid].push(info);
         }
-        console.log("orderIndo:");
+        console.log("orderIndo start");
         console.log(orderInfoCtrl)
+        console.log("orderInfo end")
     }
 
 
@@ -167,19 +190,114 @@ angular.module('HeraldApp')
     $scope.isToggleGroup = function(day,key){
         return groupShowControl[day][key];
     }
+
+    /*
+    *预约逻辑
+    */
+    $scope.newOrder = function(id,day,time){
+        var dayinfo = $scope.dateInfo[day]["dayInfo"];
+        judgeOrder(id,dayinfo,time);
+    }
+    /*
+    *判断当前是否可预约
+    */
+    var judgeOrder = function(id,day,time){
+        var data = generateData("judgeOrderUrl");
+        data['data'] = {
+            'sclId':1,
+            'itemId':id,
+            'dayInfo':day,
+            'time':time
+        }
+        callApi.getData("/yuyue","POST",data,user.token)
+            .then(function(response){
+                if(response['code']!=200){
+                    MessageShow.MessageShow(data['content'],2000);
+                } else {
+                    console.log("judge result start");
+                    console.log(response['content']);
+                    console.log("judge result end");
+                    if(response['content']['code']==1){
+                        MessageShow.MessageShow(response['content']['msg'],2000);
+                    } else {
+                        yuyueService.setInfo(typeInfo[id]['name'],id,time,day,response['content'])
+                        $state.go('yuyue-new');
+                    }
+                }
+            }, function(response){
+                MessageShow.MessageShow("网络错误",2000);
+            });
+    }
+
+
     /*
     *页面初始化函数
     *决定哪些函数需要进入即加载
     */
     function init(){
-        if(!$scope.dateInfo){
+        if(!$scope.dateInfo&&user.token){
             getDateInfo();
         }
     }
     init();
 
 }])
+/*
+*新建预约
+*/
+.controller('yuyueNewCtrl', ['$scope','yuyueService', function($scope,yuyueService){
+    var yuyueInfo = yuyueService.getInfo();
+    console.log(yuyueInfo);
+    var groundInfo = {}
+    if(yuyueInfo['data']['item']['allowHalf']==1){
+        groundInfo.allGround = [
+            {
+                "id":1,
+                "name":"全场"
+            },
+            {
+                "id":2,
+                "name":"半场"
+            }
+        ];
+        groundInfo.max ={
+            "1":yuyueInfo['data']['item']['fullMaxUsers'],
+            "2":yuyueInfo['data']['item']['halfMaxUsers']
+        } ;
+        groundInfo.min = {
+            "1":yuyueInfo['data']['item']['fullMinUsers'],
+            "2":yuyueInfo['data']['item']['halfMinUsers']
+        }
+    } else {
+        groundInfo.allGround = [
+            {
+                "id":2,
+                "name":"半场"
+            }
+        ];
+        groundInfo.max ={
+            "2":yuyueInfo['data']['item']['halfMaxUsers']
+        } ;
+        groundInfo.min = {
+            "2":yuyueInfo['data']['item']['halfMinUsers']
+        }
+    }
+    groundInfo.MySelect = groundInfo.allGround[0]['id'];
+    var changeSelect = function(){
+        console.log($scope.groundInfo.MySelect)
+    }
+    $scope.changeSelect=changeSelect;
+    var getSelect = function(){
+        return groundInfo.MySelect;
+    }
+    $scope.getSelect = getSelect;
+    $scope.yuyueInfo = yuyueInfo;
+    $scope.groundInfo = groundInfo;
+}])
 
+/*
+*我的预约
+*/
 .controller('yuyueMyCtrl', ['$scope','callApi','Storage','User','MessageShow',
     function($scope,callApi,Storage,User,MessageShow){
     
@@ -191,6 +309,7 @@ angular.module('HeraldApp')
     };
 
     var user = User.getCurrentUser();
+    console.log("current user");
     console.log(user);
 
 

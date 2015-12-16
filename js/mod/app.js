@@ -51,8 +51,10 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
     .state(
         "yuyue",{
             url:"/yuyue",
+            cache: false,
             abstract:true,
-            templateUrl:"pages/yuyue/menu.html"
+            templateUrl:"pages/yuyue/menu.html",
+            controller:"yuyueBeforeCtrl"
         })
     .state(
         "yuyue.home",
@@ -61,9 +63,16 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
             views:{
                 "yuyue-home":{
                     templateUrl:"pages/yuyue/home.html",
-                    controller:"yuyueCtrl"
+                    controller:"yuyueCtrl",
                 }
             }
+        })
+    .state(
+        "yuyue-new",
+        {
+            url:"/yuyue/new",
+            templateUrl:"pages/yuyue/new.html",
+            controller:"yuyueNewCtrl"
         })
     .state(
         "yuyue.My",

@@ -16,7 +16,7 @@
 										<div class="row">
 											<p class="col">{{item["avaliTime"]}}</p>
 											<p class="col">{{item["used"]}}/{{item["all"]}}</p>
-											<button class="col button button-small button-positive" ng-disabled="!{{item['enable']}}">预约</button>
+											<button class="col button button-small button-positive" ng-disabled="!{{item['enable']}}" ng-click="newOrder(key,'today',item['avaliTime'])">预约</button>
 										</div>
 									</ion-item>
 								</div>
@@ -40,7 +40,7 @@
 										<div class="row">
 											<p class="col">{{item["avaliTime"]}}</p>
 											<p class="col">{{item["used"]}}/{{item["all"]}}</p>
-											<button class="col button button-small button-positive" ng-disabled="!{{item['enable']}}" >预约</button>
+											<button class="col button button-small button-positive" ng-disabled="!{{item['enable']}}" ng-click="newOrder(key,'tomorrow',item['avaliTime'])">预约</button>
 										</div>
 									</ion-item>
 								</div>
@@ -65,7 +65,7 @@
 										<div class="row">
 											<p class="col">{{item["avaliTime"]}}</p>
 											<p class="col">{{item["used"]}}/{{item["all"]}}</p>
-											<button class="col button button-small button-positive" ng-disabled="!{{item['enable']}}" >预约</button>
+											<button class="col button button-small button-positive" ng-disabled="!{{item['enable']}}" ng-click="newOrder(key,'afterTomo',item['avaliTime'])">预约</button>
 										</div>
 									</ion-item>
 								</div>

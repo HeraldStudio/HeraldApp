@@ -15,7 +15,9 @@ angular.module('HeraldApp.services',[])
     }
 }])
 
-
+/*
+*用户模块
+*/
 .service('User', ['Storage','callApi','$q','$log', function(Storage,callApi,$q,$log){
     var storageKey = 'user';
     var user = Storage.get(storageKey) || {}
@@ -70,11 +72,23 @@ angular.module('HeraldApp.services',[])
         Storage.remove(storageKey);
     }
 
+    var judgeUser = function(user){
+        for(name in user){
+            return false;
+        }
+        return true;
+    }
     this.getCurrentUser = function() {
         return user;
     }
-}])
 
+    this.checkUser = function(){
+
+    }
+}])
+/*
+*消息显示模块
+*/
 .service('MessageShow', ['$ionicLoading', function($ionicLoading){
     this.errorShow = function(message){
         $ionicLoading.show({
@@ -94,6 +108,50 @@ angular.module('HeraldApp.services',[])
     }
     
 }])
+
+/*
+*预约模块，这里没有想到好的方法共享数据，
+*目前就采用这种搓办法
+*/
+.service('yuyueService', ['$http', function($http){
+    var yuyueInfo = {
+        "name":"篮球",
+        "id":"8",
+        "time":"18:00-19:00",
+        "day":"2015-12-15",
+        "phone":"15651918580",
+        "data":{
+            "code":0,
+            "item":{
+                "allowHalf":1,
+                "fullMaxUsers":15,
+                "fullMinUsers":10,
+                "halfMaxUsers":9,
+                "halfMinUsers":6
+            }
+        }
+    };
+
+    this.getInfo = function(){
+        return yuyueInfo;
+    }
+
+    this.setInfo = function(name,id,time,day,data){
+        yuyueInfo.name = name;
+        yuyueInfo.id = id;
+        yuyueInfo.time = time;
+        yuyueInfo.day = day;
+        yuyueInfo.data = data;
+        
+    }
+    this.setPhone = function(phone){
+        yuyueInfo.phone = phone;
+    }
+
+}])
+/*
+*调用服务器api模块
+*/
 .service('callApi', ['$http','ENV','$q','$log', function($http,ENV,$q,$log){
     var i = 1;
     // $log.debug(ionic.Platform)
