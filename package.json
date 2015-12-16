@@ -1,19 +1,19 @@
 {
-    "name": "heraldapp",
-    "version": "1.0.0",
-    "description": "Herald App",
-    "scripts": {
-        "start": "gulp"
-    },
-    "author": "LiangJ",
-    "license": "ISC",
-    "devDependencies": {
-        "gulp": "^3.9.0",
-        "gulp-minify-css": "^1.2.0",
-        "gulp-rename": "^1.2.0",
-        "gulp-load-plugins": "1.0.0-rc.1",
-        "gulp-sass": "^2.0.3",
-        "gulp-webserver": "^0.9.1",
-        "run-sequence":"^1.1.0"
-    }
+  "name": "heraldapp",
+  "version": "1.0.0",
+  "description": "Herald App",
+  "scripts": {
+    "start": "gulp"
+  },
+  "author": "LiangJ",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-load-plugins": "1.0.0-rc.1",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-webserver": "^0.9.1",
+    "run-sequence": "^1.1.0"
+  }
 }
