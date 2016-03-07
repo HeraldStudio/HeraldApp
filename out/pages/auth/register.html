@@ -1,0 +1,29 @@
+<ion-view>
+	<div class="bar bar-header bar-positive">
+	      <a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
+	      <h1 class="title">注册</h1>
+	</div>
+	<ion-content class="has-header">
+		<form name="userForm" ng-submit="register(userForm.$valid)" novalidate>
+			<div class="padding">
+				<label class="item item-input">
+					<input type="text" name="name" placeholder="手机号" ng-model="formData.reg_username" required>
+				</label>
+				<label class="item item-input">
+					<input type="password" name="pwd" placeholder="密码" ng-model="formData.pwd" required>
+				</label>
+				<label class="item item-input">
+					<input type="text" name="cardnum" placeholder="一卡通号" ng-model="formData.cardnumber" required>
+				</label>
+				<label class="item item-input">
+					<input type="password" name="cardpwd" placeholder="统一身份认证密码" ng-model="formData.cardpwd" required>
+				</label>
+				<span ng-show="error_message"><br>{{error_message}}</span>
+				
+				<button class="button button-block button-positive" type="submit">注册</button>
+			</div>
+			
+		</form>
+		
+	</ion-content>
+</ion-view>

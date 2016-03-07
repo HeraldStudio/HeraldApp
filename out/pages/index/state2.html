@@ -1,0 +1,141 @@
+<script src="/js/mod/test.js"></script>
+<script type="text/javascript">
+    a();
+</script>
+<!-- <ion-view title="state2"> -->
+
+<!-- <div class="bar bar-header">
+  <button class="button icon ion-navicon"></button>
+  <h1 class="title">Header Buttons</h1>
+  <button class="button">Edit</button>
+</div> -->
+
+<!-- <ion-nav-buttons side="left">
+  <button class="button">
+    我是一个在导航栏左侧的按钮！
+  </button>
+</ion-nav-buttons> -->
+<!-- <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+</ion-nav-buttons> -->
+
+<!-- <ion-content>
+   <button class="button">
+  <i class="icon ion-loading-c"></i> Loading...
+</button>
+
+<button class="button icon-left ion-home">Home</button>
+
+<button class="button icon-left ion-star button-positive">Favorites</button>
+
+<a class="button icon-right ion-chevron-right button-calm">Learn More</a>
+
+<a class="button icon-left ion-chevron-left button-clear button-dark">Back</a>
+
+<button class="button icon ion-gear-a"></button>
+
+<a class="button button-icon icon ion-settings"></a>
+
+<a class="button button-outline icon-right ion-navicon button-balanced">Reorder</a>
+ <ion-scroll direction="xy" on-scroll="true">
+ <ion-list>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+            <ion-item>
+              html
+            </ion-item>
+          </ion-list>
+  </ion-scroll>
+</ion-content>
+
+
+ -->
+
+
+
+
+
+
+
+
+
+<ion-header-bar class="bar-positive">
+      <div class="buttons">
+        <button class="button button-icon icon ion-ios-minus-outline"
+          ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
+      </div>
+      <h1 class="title">Ionic Delete/Option Buttons</h1>
+      <div class="buttons">
+        <button class="button" ng-click="data.showDelete = false; data.showReorder = !data.showReorder">
+            Reorder
+        </button>
+      </div>
+    </ion-header-bar>
+
+    <ion-content>
+
+      <!-- The list directive is great, but be sure to also checkout the collection repeat directive when scrolling through large lists -->
+      
+      <ion-list show-delete="data.showDelete" show-reorder="data.showReorder">
+
+        <ion-item ng-repeat="item in items" 
+                  item="item"
+                  href="#/item/{{item.id}}" class="item-remove-animate">
+          Item {{ item.id }}
+          <ion-delete-button class="ion-minus-circled" 
+                             ng-click="onItemDelete(item)">
+          </ion-delete-button>
+          <ion-option-button class="button-assertive"
+                             ng-click="edit(item)">
+            Edit
+          </ion-option-button>
+          <ion-option-button class="button-calm"
+                             ng-click="share(item)">
+            Share
+          </ion-option-button>
+          <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+        </ion-item>
+
+      </ion-list>
+
+    </ion-content>
+      
+
+<!-- </ion-view> -->

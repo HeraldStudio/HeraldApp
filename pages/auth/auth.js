@@ -45,8 +45,9 @@ angular.module('HeraldApp')
 	}
 }])
 
-.controller('registerCtrl', ['User','$scope','$log','MessageShow','$state',
-		function(User,$scope,$log,MessageShow,$state){
+.controller('registerCtrl', ['User','$scope','$log','MessageShow','$state','$rootScope',
+		function(User,$scope,$log,MessageShow,$state,$rootScope){
+	var laststate = $rootScope.lastState||"index.home";
 	$scope.formData = {
 		'reg_username':'',
 		'pwd':'',
@@ -80,7 +81,7 @@ angular.module('HeraldApp')
 					} else {
 						MessageShow.MessageShow("注册成功",1000);
 						setTimeout(function(){
-							$state.go('index.home');
+							$state.transitionTo(laststate, {},{reload: true, notify:true});
 						},1000)
 					}
 

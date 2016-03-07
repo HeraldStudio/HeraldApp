@@ -1,11 +1,8 @@
 angular.module('HeraldApp')
 .controller('yuyueBeforeCtrl', ['$state','User','$rootScope', 'MessageShow',function($state,User,$rootScope,MessageShow){
     var user = User.getCurrentUser();
-    console.log("yuyueBefore start");
     if (user.token){
         $rootScope.user = user;
-        console.log("current user");
-        console.log(user)
     } else {
         MessageShow.MessageShow("请先登录",1000);
         $rootScope.lastState = "yuyue.home";
@@ -19,7 +16,6 @@ angular.module('HeraldApp')
     '$http','$state','yuyueService','$rootScope',
     function($scope,callApi,$ionicLoading,User,MessageShow,$http,$state,yuyueService,$rootScope){
 
-    console.log('yuyue home start');
     var allUrl = {
         'getDateUrl':{
             'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/initOrderIndexP.do?sclId=1',
@@ -35,6 +31,10 @@ angular.module('HeraldApp')
         },
         'judgeOrderUrl':{
             'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/judgeOrderP.do',
+            'method':'GET'
+        },
+        'getPhoneUrl':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/initEditOrderP.do?sclId=1',
             'method':'GET'
         }
     };
@@ -116,32 +116,34 @@ angular.module('HeraldApp')
                 "weekInfo":data['timeList'][2]['dayInfo'].split(' ')[1]
             }
         }
-        console.log("dateinfo:")
-        console.log(dateInfo);
         $scope.dateInfo = dateInfo;
     }
 
     /*
     *获取每一个预约项目选择可预约
     */
+    var current_state = true;
     var getOrderInfo = function(itemid,day){
-        if(!orderInfoCtrl[day][itemid]){
-        data = generateData('getOrderInfoUrl');
-        data['data'] = {
-            'sclId':1,
-            'itemId':itemid,
-            'dayInfo':$scope.dateInfo[day]["dayInfo"]
-        };
-        callApi.getData("/yuyue","POST",data,user.token)
-            .then(function(data){
-                if(data['code'] != 200){
-                    MessageShow.MessageShow(data['content'],2000);
-                } else {
-                   dealOrderInfo(itemid,day,data['content']);
-                }
-            },function(data){
-                MessageShow.MessageShow("网络错误",2000);
-            });
+        if(!orderInfoCtrl[day][itemid]&&current_state){
+            current_state=false;
+            MessageShow.MessageShow("正在加载",10000);
+            // MessageShow.show("正在加载");
+            data = generateData('getOrderInfoUrl');
+            data['data'] = {
+                'sclId':1,
+                'itemId':itemid,
+                'dayInfo':$scope.dateInfo[day]["dayInfo"]
+            };
+            callApi.getData("/yuyue","POST",data,user.token)
+                .then(function(data){
+                    if(data['code'] != 200){
+                        MessageShow.MessageShow(data['content'],2000);
+                    } else {
+                       dealOrderInfo(itemid,day,data['content']);
+                    }
+                },function(data){
+                    MessageShow.MessageShow("网络错误",2000);
+                });
         }
     }
 
@@ -165,9 +167,8 @@ angular.module('HeraldApp')
             }
             orderInfoCtrl[day][itemid].push(info);
         }
-        console.log("orderIndo start");
-        console.log(orderInfoCtrl)
-        console.log("orderInfo end")
+        MessageShow.hide();
+        current_state = true;
     }
 
 
@@ -217,18 +218,35 @@ angular.module('HeraldApp')
                     console.log("judge result start");
                     console.log(response['content']);
                     console.log("judge result end");
-                    if(response['content']['code']==1){
+                    if(response['content']['code']!=0){
                         MessageShow.MessageShow(response['content']['msg'],2000);
                     } else {
                         yuyueService.setInfo(typeInfo[id]['name'],id,time,day,response['content'])
-                        $state.go('yuyue-new');
+                        getPhone();
+                       
                     }
                 }
             }, function(response){
                 MessageShow.MessageShow("网络错误",2000);
             });
     }
-
+    /*
+    *获取手机号
+    */
+    var getPhone = function(){
+        var data = generateData("getPhoneUrl");
+        callApi.getData("/yuyue","POST",data,user.token)
+            .then(function(response){
+                if(response['code'] != 200){
+                    MessageShow.MessageShow(response['content'],2000);
+                } else {
+                    yuyueService.setPhone(response['content']['phone']);
+                    $state.go('yuyue-new');
+                }
+            },function(){
+                MessageShow.MessageShow("网络错误",2000);
+            })
+    }
 
     /*
     *页面初始化函数
@@ -242,61 +260,228 @@ angular.module('HeraldApp')
     init();
 
 }])
+
+
+
 /*
 *新建预约
+*Controller
 */
-.controller('yuyueNewCtrl', ['$scope','yuyueService', function($scope,yuyueService){
+.controller('yuyueNewCtrl', ['$scope','yuyueService','callApi','MessageShow','User','$ionicModal','$sce',
+     function($scope,yuyueService,callApi,MessageShow,User,$ionicModal,$sce){
     var yuyueInfo = yuyueService.getInfo();
-    console.log(yuyueInfo);
-    var groundInfo = {}
-    if(yuyueInfo['data']['item']['allowHalf']==1){
-        groundInfo.allGround = [
-            {
-                "id":1,
-                "name":"全场"
-            },
-            {
-                "id":2,
-                "name":"半场"
-            }
-        ];
-        groundInfo.max ={
-            "1":yuyueInfo['data']['item']['fullMaxUsers'],
-            "2":yuyueInfo['data']['item']['halfMaxUsers']
-        } ;
-        groundInfo.min = {
-            "1":yuyueInfo['data']['item']['fullMinUsers'],
-            "2":yuyueInfo['data']['item']['halfMinUsers']
+    var user;
+    var allUrl = {
+        'myOrderUrl':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/fetchMyOrdersP.do?sclId=1',
+            'method':'GET'
+        },
+        'validateImgUrl':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/control/validateimage',
+            'method':'GET'
+        },
+        'getFriendList':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/searchUserP.do?sclId=1&pageNumber=1&start=0&pageSize=5',
+            'method':'GET'
+        },
+        'newUrl':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/insertOredrP.do',
+            'method':'GET'
         }
-    } else {
-        groundInfo.allGround = [
-            {
-                "id":2,
-                "name":"半场"
-            }
-        ];
-        groundInfo.max ={
-            "2":yuyueInfo['data']['item']['halfMaxUsers']
-        } ;
-        groundInfo.min = {
-            "2":yuyueInfo['data']['item']['halfMinUsers']
-        }
+    };
+    var groundInfo = {
+        "allUserNum":0,
+        "allUser":[],
+        "allUserString":"",
+        "searchUser":[],
+        "searchCardnum":""
     }
-    groundInfo.MySelect = groundInfo.allGround[0]['id'];
-    var changeSelect = function(){
-        console.log($scope.groundInfo.MySelect)
-    }
-    $scope.changeSelect=changeSelect;
-    var getSelect = function(){
-        return groundInfo.MySelect;
-    }
-    $scope.getSelect = getSelect;
+    
     $scope.yuyueInfo = yuyueInfo;
     $scope.groundInfo = groundInfo;
+
+    /*
+    *将搜索到的好友添加以及移除
+    *groundInfo的alluser
+    */
+    var removeUser = function(user){
+        groundInfo.allUser.pop(user);
+    }
+    $scope.removeUser = removeUser;
+    var newUser = function(user){
+        groundInfo.allUser.push(user);
+        user.state=false;
+    }
+    $scope.newUser = newUser;
+    /*
+    *搜索好友，并且显示搜索到的好友
+    */
+    var searchUser = function(){
+        var cardnum = groundInfo.searchCardnum;
+        var data = {
+            'url':allUrl.getFriendList.url+"&cardNo="+cardnum,
+            'method':allUrl.getFriendList.method
+        }
+        callApi.getData("/yuyue","POST",data,user.token)
+            .then(function(response){
+                if(response.code!=200){
+                    MessageShow.MessageShow(response.content,2000);
+                } else {
+                    dealSerchResult(cardnum,response.content);
+                }
+            }, function(){
+                MessageShow.MessageShow("网络错误",2000);
+            })
+    }
+    var dealSerchResult = function(cardnum,content){
+        groundInfo.searchUser = [];
+        if(content.total<1){
+            MessageShow.MessageShow("没有搜索到该用户",1000);
+        } else {
+            for(var i=0;i<content.rows. length;i++){
+                var temp = {
+                    'cardnum':cardnum,
+                    'name':content.rows[i].nameDepartment,
+                    'userId':content.rows[i].userId,
+                    'state':true
+                }
+                groundInfo.searchUser.push(temp);
+            }
+        }
+    }
+    $scope.searchUser = searchUser;
+
+    /*
+    *添加好友完成
+    */
+    var completeAddUser = function(){
+        groundInfo.allUserNum = groundInfo.allUser.length;
+        groundInfo.allUserString = "";
+        for(var i=0;i<groundInfo.allUser.length;i++){
+            groundInfo.allUserString += groundInfo.allUser[i].name+"</br>";
+        }
+        groundInfo.allUserString =  $sce.trustAsHtml(groundInfo.allUserString);
+        $scope.modal.hide();
+
+    }
+    $scope.completeAddUser = completeAddUser;
+    /*
+    *判断预约信息是否合法
+    */
+    var judegInfo = function(){
+        if(!yuyueInfo.phone || yuyueInfo.phone.length!=11){
+            MessageShow.MessageShow("手机号不合法",1000);
+        } else if(groundInfo.allUserNum+1<groundInfo.min[groundInfo.MySelect] || groundInfo.allUserNum+1>groundInfo.max[groundInfo.MySelect]) {
+            MessageShow.MessageShow("人数不合法",1000);
+        } else {
+            newYuyue();
+        }
+    }
+    $scope.judegInfo = judegInfo;
+    /*
+    *新建预约
+    */
+    var newYuyue = function(){
+        var senddata = {
+            'orderVO.useMode':$scope.groundInfo.MySelect,
+            'sclId':1,
+            'orderVO.useTime':yuyueInfo.day+" "+yuyueInfo.time,
+            'orderVO.itemId':yuyueInfo.id,
+            'orderVO.phone':yuyueInfo.phone,
+            'orderVO.remark':''
+        } 
+        var init_url = allUrl['newUrl']['url']+"?";
+        var state=0;
+        for(var i in senddata){
+            if(state==0){
+                init_url += i+"="+senddata[i];
+                state = 1;
+            } else {
+                init_url += "&"+i+"="+encodeURIComponent(senddata[i]);
+            }
+            
+        }
+        for(var i=0;i<groundInfo.allUserNum;i++){
+            init_url += "&"+"useUserIds="+groundInfo.allUser[i].userId;
+        }
+        var data = {
+            'url':init_url,
+            'method':allUrl['newUrl']['method'],
+        }
+        callApi.getData("/yuyue","POST",data,user.token)
+            .then(function(response){
+                if(response['code'] == 200){
+                    MessageShow.MessageShow(response['content']['msg'],2000);
+                } else {
+                    MessageShow.MessageShow(response['content'],2000);
+                }
+            },function(){
+                MessageShow.MessageShow("网络错误",2000);
+            })
+
+    }
+
+    /*
+    *判断用户是否已经登录
+    *如果没有登录，跳转到登录页面
+    */
+    var judgeUser = function(){
+        user = User.getCurrentUser();
+        if (user.token){
+           
+        } else {
+            MessageShow.MessageShow("请先登录",1000);
+            $rootScope.lastState = "yuyue-new";
+            $state.go('login');
+        }
+    }
+    function init() {
+        judgeUser();
+        if (yuyueInfo['data']['item']['allowHalf'] == 1) {
+            groundInfo.allGround = [{
+                "id": 1,
+                "name": "全场"
+            }, {
+                "id": 2,
+                "name": "半场"
+            }];
+            groundInfo.max = {
+                "1": yuyueInfo['data']['item']['fullMaxUsers'],
+                "2": yuyueInfo['data']['item']['halfMaxUsers']
+            };
+            groundInfo.min = {
+                "1": yuyueInfo['data']['item']['fullMinUsers'],
+                "2": yuyueInfo['data']['item']['halfMinUsers']
+            }
+        } else {
+            groundInfo.allGround = [{
+                "id": 2,
+                "name": "半场"
+            }];
+            groundInfo.max = {
+                "2": yuyueInfo['data']['item']['fullMaxUsers']
+            };
+            groundInfo.min = {
+                "2": yuyueInfo['data']['item']['fullMinUsers']
+            }
+        }
+        groundInfo.MySelect = groundInfo.allGround[0]['id'];
+
+        $ionicModal.fromTemplateUrl('addFriend.html',{
+            scope:$scope,
+            animation:'slide-in-up'
+        }).then(function(modal){
+            $scope.modal = modal;
+        });
+        
+    }
+
+    init();
 }])
 
 /*
 *我的预约
+*Controller
 */
 .controller('yuyueMyCtrl', ['$scope','callApi','Storage','User','MessageShow',
     function($scope,callApi,Storage,User,MessageShow){
@@ -305,12 +490,14 @@ angular.module('HeraldApp')
         'myOrderUrl':{
             'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/fetchMyOrdersP.do?sclId=1',
             'method':'GET'
+        },
+        'cancelUrl':{
+            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/delOrderP.do?sclId=1',
+            'method':'GET'
         }
     };
 
     var user = User.getCurrentUser();
-    console.log("current user");
-    console.log(user);
 
 
 /*
@@ -322,10 +509,8 @@ angular.module('HeraldApp')
             'url':allUrl['myOrderUrl']['url'],
             'method':allUrl['myOrderUrl']['method']
         };
-        console.log(data);
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(data){
-                console.log(data);
                 if(data['code'] != 200){
                     MessageShow.MessageShow(data['content'],2000);
                 } else {
@@ -338,9 +523,31 @@ angular.module('HeraldApp')
 
     function dealMyorder(data){
         $scope.Myorder = data;
-        console.log($scope.Myorder);
     }
 
+    var cancelOrder = function(id){
+        var data = {
+            'url':allUrl['cancelUrl']['url']+"&id="+id,
+            'method':allUrl['cancelUrl']['method']
+        };
+        console.log("cancel id:"+id);
+        callApi.getData("/yuyue","POST",data,user.token)
+            .then(function(data){
+                if(data['code'] != 200){
+                    MessageShow.MessageShow(data['content'],2000);
+                } else {
+                   if(data['content']['msg'] == "success"){
+                        MessageShow.MessageShow("取消成功",2000);
+                        getMyorder();
+                   } else {
+                    MessageShow.MessageShow(data['content']['msg'],2000);
+                   }
+                }
+            },function(){
+                MessageShow.MessageShow("网络错误",2000);
+            })
+    }
+    $scope.cancelOrder = cancelOrder;
     function init(){
         if(!$scope.Myorder){
             getMyorder();
@@ -352,7 +559,5 @@ angular.module('HeraldApp')
         '2':'完成'
     }
     init();
-
-
 }])
 ;
