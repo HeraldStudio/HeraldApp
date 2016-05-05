@@ -89,7 +89,12 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(data){
                 if(data['code'] != 200){
-                    MessageShow.MessageShow(data['content'],2000);
+                    if(data['code']==401){
+                        $rootScope.lastState = "yuyue.home";
+                        $state.go('login');
+                    } else {
+                        MessageShow.MessageShow(data['content'],2000);
+                    };
                 } else {
                    dealDateInfo(data['content']);
                 }
@@ -137,7 +142,12 @@ angular.module('HeraldApp')
             callApi.getData("/yuyue","POST",data,user.token)
                 .then(function(data){
                     if(data['code'] != 200){
-                        MessageShow.MessageShow(data['content'],2000);
+                        if(data['code']==401){
+                            $rootScope.lastState = "yuyue.home";
+                            $state.go('login');
+                        } else {
+                            MessageShow.MessageShow(data['content'],2000);
+                        };
                     } else {
                        dealOrderInfo(itemid,day,data['content']);
                     }
@@ -213,7 +223,12 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(response){
                 if(response['code']!=200){
-                    MessageShow.MessageShow(data['content'],2000);
+                    if(data['code']==401){
+                        $rootScope.lastState = "yuyue.home";
+                        $state.go('login');
+                    } else {
+                        MessageShow.MessageShow(data['content'],2000);
+                    };
                 } else {
                     console.log("judge result start");
                     console.log(response['content']);
@@ -325,7 +340,12 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(response){
                 if(response.code!=200){
-                    MessageShow.MessageShow(response.content,2000);
+                    if(data['code']==401){
+                        $rootScope.lastState = "yuyue.home";
+                        $state.go('login');
+                    } else {
+                        MessageShow.MessageShow(data['content'],2000);
+                    };
                 } else {
                     dealSerchResult(cardnum,response.content);
                 }
@@ -411,7 +431,12 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(response){
                 if(response['code'] == 200){
-                    MessageShow.MessageShow(response['content']['msg'],2000);
+                    if(data['code']==401){
+                        $rootScope.lastState = "yuyue.home";
+                        $state.go('login');
+                    } else {
+                        MessageShow.MessageShow(data['content'],2000);
+                    };
                 } else {
                     MessageShow.MessageShow(response['content'],2000);
                 }
@@ -512,7 +537,12 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(data){
                 if(data['code'] != 200){
-                    MessageShow.MessageShow(data['content'],2000);
+                    if(data['code']==401){
+                        $rootScope.lastState = "yuyue.home";
+                        $state.go('login');
+                    } else {
+                        MessageShow.MessageShow(data['content'],2000);
+                    };
                 } else {
                    dealMyorder(data);
                 }
