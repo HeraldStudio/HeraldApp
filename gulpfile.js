@@ -26,7 +26,7 @@ var paths = {
     cssfile:['./static/css/herald.app.min.css','./static/css/ionic.min.css'],
     jsfile:['./static/js/ionic.bundle.min.js','./static/js/angular-resource.min.js'],
     htmlfile:['./**/*.html','!./node_modules/**/*.html','!./out/**/*.html','!index.html'],
-    imagefile:['./static/img/**/*.jpg'],
+    imagefile:['./static/img/**/*.jpg','./static/img/**/*.png'],
     fontfile:['./static/fonts/**/*.*']
 };
 

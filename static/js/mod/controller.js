@@ -1,17 +1,10 @@
 angular.module('HeraldApp')
-.controller('HomeCtrl', ['$scope', '$ionicSlideBoxDelegate','$sce',function($scope,$ionicSlideBoxDelegate,$sce){
-    $scope.slideHasChanged = function($index){
-        
-    };
+.controller('HomeCtrl', ['$scope', 'callApi',function($scope,callApi){
     $scope.slide_item=[
-            {'slideimg':"./static/img/index/slide1.jpg"},
-            {'slideimg':"./static/img/index/slide2.jpg"},
-            {'slideimg':"./static/img/index/slide2.jpg"},
-        ];
-}])
+            {'slideimg':"./static/img/2016-recuit.jpg"},
+            {'slideimg':"./static/img/2016-activity-advertising.jpg"}];
 
+    var getSlide = function() {
+    }
 
-
-
-
-;
+}]);

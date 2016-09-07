@@ -1,0 +1,31 @@
+<ion-view>
+	<div class="bar bar-header bar-positive">
+		<a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
+		<h1 class="title">校园活动</h1>
+	</div>
+	<ion-content class="has-header activity" direction="y">
+		<ion-refresher pulling-text="下拉刷新" pulling-icon="ion-ios-refresh-empty" on-refresh="doRefresh()"></ion-refresher>
+		<div class="activity_item" ng-repeat="item in activity.content">
+			<div ng-click="clickDetail(item['detail_url'])">
+				<div class="header">
+					<p class="title">{{item['title']}}</p>
+					<p>{{item['association']}} <span class="activity_state">{{item['state']}}</span></p>
+				</div>
+				<div class="content">
+					<img src="{{item['pic_url']}}" class="activity_pic">
+					<p>活动时间: {{item['activity_time']}}</p>
+					<p>活动地点: {{item['location']}}</p>
+					<p>{{item['introduction']}}</p>
+					<p>查看性情 ></p>
+				</div>
+			</div>
+		</div>
+
+		<ion-infinite-scroll
+		    on-infinite="addItems()"
+		    ng-if="activity.scrollState"
+		    immediate-check="false"
+		  	>
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>
