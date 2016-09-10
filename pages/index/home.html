@@ -1,22 +1,26 @@
 <ion-view title="首页">
-    <ion-nav-buttons side="left">
+    <!-- <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
+    </ion-nav-buttons> -->
     <ion-content  direction="y" >
             <div class="home_slide">
             <ion-slide-box does-continue="true" auto-play="true"  slide-interval="3000" on-slide-changed="slideHasChanged($index)" >
                 <ion-slide ng-repeat="item in slide_item">
                     <div>
-                        <img src="{{item['slideimg']}}">
+                        <img src="{{item['slideimg']}}" class="slide-img">
                     </div>
                 </ion-slide>
             </ion-slide-box>
             </div>
-            <div class="list">
-                <a class="item item-icon-left" ui-sref="yuyue.home">
-                    <i class="icon ion-ios-basketball"></i>
-                    场馆预约
-                </a>
+            <div class="row index_link">
+                <div class="col col-25 color_grey" ui-sref="yuyue.home">
+                    <i class="icon ion-ios-basketball index_icon royal"></i>
+                    <div>场馆预约</div>
+                </div>
+                <div class="col col-25" ui-sref="activity">
+                    <img src="./static/img/index/activity.png" class="index_icon">
+                    <div>校园活动</div>
+                </div>
             </div>
     </ion-content>
 </ion-view>

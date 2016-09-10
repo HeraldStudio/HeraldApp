@@ -201,7 +201,7 @@ angular.module('HeraldApp.services',[])
                 'token':token,
                 // 'Content-Type':'application/x-www-form-urlencoded'
             },
-            timeout:5000
+            timeout:10000
         }
         // $http.defaults.headers.common['Token'] = token;
         if(method=="GET"){
