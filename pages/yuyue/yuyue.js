@@ -223,16 +223,16 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(response){
                 if(response['code']!=200){
-                    if(data['code']==401){
+                    if(response['code']==401){
                         $rootScope.lastState = "yuyue.home";
                         $state.go('login');
                     } else {
-                        MessageShow.MessageShow(data['content'],2000);
+                        MessageShow.MessageShow(response['content'],2000);
                     };
                 } else {
-                    console.log("judge result start");
-                    console.log(response['content']);
-                    console.log("judge result end");
+                    // console.log("judge result start");
+                    // console.log(response['content']);
+                    // console.log("judge result end");
                     if(response['content']['code']!=0){
                         MessageShow.MessageShow(response['content']['msg'],2000);
                     } else {
@@ -296,8 +296,8 @@ angular.module('HeraldApp')
             'method':'GET'
         },
         'getFriendList':{
-            'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/searchUserP.do?sclId=1&pageNumber=1&start=0&pageSize=5',
-            'method':'GET'
+            'url':'http://yuyue.seu.edu.cn/eduplus/order/order/order/order/searchUser.do?sclId=1',
+            'method':'POST'
         },
         'newUrl':{
             'url':'http://yuyue.seu.edu.cn/eduplus/phoneOrder/insertOredrP.do',
@@ -332,19 +332,22 @@ angular.module('HeraldApp')
     *搜索好友，并且显示搜索到的好友
     */
     var searchUser = function(){
-        var cardnum = groundInfo.searchCardnum;
+        var cardnum = encodeURIComponent(groundInfo.searchCardnum);
         var data = {
-            'url':allUrl.getFriendList.url+"&cardNo="+cardnum,
-            'method':allUrl.getFriendList.method
+            'url':allUrl.getFriendList.url,
+            'method':allUrl.getFriendList.method,
+            'data':{
+                'cardNo':cardnum
+            }
         }
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(response){
                 if(response.code!=200){
-                    if(data['code']==401){
+                    if(response['code']==401){
                         $rootScope.lastState = "yuyue.home";
                         $state.go('login');
                     } else {
-                        MessageShow.MessageShow(data['content'],2000);
+                        MessageShow.MessageShow(response['content'],2000);
                     };
                 } else {
                     dealSerchResult(cardnum,response.content);
@@ -355,14 +358,14 @@ angular.module('HeraldApp')
     }
     var dealSerchResult = function(cardnum,content){
         groundInfo.searchUser = [];
-        if(content.total<1){
+        if(content.length<1){
             MessageShow.MessageShow("没有搜索到该用户",1000);
         } else {
-            for(var i=0;i<content.rows. length;i++){
+            for(var i=0;i<content. length;i++){
                 var temp = {
                     'cardnum':cardnum,
-                    'name':content.rows[i].nameDepartment,
-                    'userId':content.rows[i].userId,
+                    'name':content[i].nameDepartment,
+                    'userId':content[i].userId,
                     'state':true
                 }
                 groundInfo.searchUser.push(temp);
@@ -421,8 +424,9 @@ angular.module('HeraldApp')
             }
             
         }
+        init_url += "&useUserIds=";
         for(var i=0;i<groundInfo.allUserNum;i++){
-            init_url += "&"+"useUserIds="+groundInfo.allUser[i].userId;
+            init_url += groundInfo.allUser[i].userId + ",";
         }
         var data = {
             'url':init_url,
@@ -431,11 +435,11 @@ angular.module('HeraldApp')
         callApi.getData("/yuyue","POST",data,user.token)
             .then(function(response){
                 if(response['code'] == 200){
-                    if(data['code']==401){
+                    if(response['code']==401){
                         $rootScope.lastState = "yuyue.home";
                         $state.go('login');
                     } else {
-                        MessageShow.MessageShow(data['content'],2000);
+                        MessageShow.MessageShow(response['content']['msg'],2000);
                     };
                 } else {
                     MessageShow.MessageShow(response['content'],2000);

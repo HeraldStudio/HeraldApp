@@ -216,7 +216,6 @@ angular.module('HeraldApp.services',[])
                     if(p!="data"){
                         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                     } else {
-                        // console.log(JSON.stringify(obj[p]));
                         str.push(encodeURIComponent(p) + "=" + JSON.stringify(obj[p]));
                     }
                 }
