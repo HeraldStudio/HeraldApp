@@ -1,0 +1,43 @@
+<ion-view>
+	<div class="bar bar-header bar-positive">
+		<a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
+		<h1 class="title">小猴快递</h1>
+	</div>
+	<ion-content class="has-header deliver" direction="y">
+		<ion-refresher pulling-text="下拉刷新" pulling-icon="ion-ios-refresh-empty" on-refresh="doRefresh()"></ion-refresher>
+		<div class="deliver_item" ng-repeat="item in order.content">
+			<div>
+				<div class="header">
+					<p>
+						<i class="icon ion-ios-location deliver_icon"></i>
+						<span class="title">{{item['locate']}}</span>
+						<i class="icon ion-ios-time-outline icondeliver_icon"></i>
+						<span class="title">{{item['arrival']}}</span>
+						<span class="activity_state title">{{item['state']}}</span>
+					</p>
+					<p>
+						<i class="icon ion-ios-telephone deliver_icon"></i>
+						<span class="title">{{item['phone']}}</span>
+					</p>
+				</div>
+				<div class="content">
+					<p>创建时间: {{item['sub_time']}}</p>
+					<p>快递重量: {{item['weight']}}</p>
+					<p>收件地点: {{item['dest']}}</p>
+					<p>短信: {{item['sms']}}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="no_content_show deliver_item" ng-if="order.no_content">
+			<p>你还没有任何快递记录呢</p>
+		</div>
+
+		<ion-infinite-scroll
+		    on-infinite="addItems()"
+		    ng-if="activity.scrollState"
+		    immediate-check="false"
+		  	>
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>

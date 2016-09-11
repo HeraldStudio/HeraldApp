@@ -1,0 +1,40 @@
+//跨浏览器圆角
+@mixin rounded-corners($number) {
+	-webkit-border-radius: $number;
+    -moz-border-radius: $number;
+    border-radius: $number;
+}
+
+$my-grey:rgb(238,238,238);
+$my-white:#FFFFFF;
+$grey-back:#EEEEEE;
+$blue: rgba(56,126,245,1);
+.deliver {
+	background-color: $grey-back;
+	font-size: 14px;
+	color: rgba(0,0,0,0.7);
+
+	.deliver_item {
+		margin: 5px 5px 5px 5px;
+		padding: 10px 10px;
+		background-color: $my-white;
+		@include rounded-corners(10px);
+		.deliver_icon {
+			margin-right:10px;
+		}
+		.header {
+			.title {
+				color: $blue;
+				font-size: 16px;
+				margin-right: 10px;
+			}
+			.activity_state {
+				float: right;
+				color: $blue;
+				margin-right:20px;
+			}
+		}
+		.content {
+		}
+	}
+}

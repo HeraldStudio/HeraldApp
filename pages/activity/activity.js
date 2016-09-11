@@ -1,11 +1,11 @@
 angular.module('HeraldApp')
 .controller('activityCtrl', ['$scope','callApi','MessageShow','$state','$ionicScrollDelegate','$ionicLoading', function($scope,callApi,MessageShow,$state,$ionicScrollDelegate,$ionicLoading){
 
-		var activity = {
+	var activity = {
 			page:1,
 			scrollState:true,
 			content:[]
-		}
+	}
 
     var getActivity = function(pagenumber,callback) {
     	var data = {
@@ -77,7 +77,7 @@ angular.module('HeraldApp')
 	  	}
 	  }
 
-	  function getState(start_time,end_time) {
+	function getState(start_time,end_time) {
 	  	var start_date = new Date(Date.parse(start_time.replace(/-/g, "/")));
 	  	var end_date = new Date(Date.parse(end_time.replace(/-/g, "/")));
 	  	var current_date = new Date();
@@ -86,7 +86,7 @@ angular.module('HeraldApp')
 	  	} else {
 	  		return "进行中";
 	  	} 
-	  }
+	}
 
     init();
 }]);

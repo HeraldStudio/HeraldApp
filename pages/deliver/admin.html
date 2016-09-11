@@ -1,0 +1,17 @@
+<ion-view>
+	<div class="bar bar-header bar-positive">
+		<a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
+		<h1 class="title">小猴快递</h1>
+	</div>
+	<ion-content class="has-header activity" direction="y">
+		<ion-refresher pulling-text="下拉刷新" pulling-icon="ion-ios-refresh-empty" on-refresh="doRefresh()"></ion-refresher>
+		<div>admin</div>
+
+		<ion-infinite-scroll
+		    on-infinite="addItems()"
+		    ng-if="activity.scrollState"
+		    immediate-check="false"
+		  	>
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>

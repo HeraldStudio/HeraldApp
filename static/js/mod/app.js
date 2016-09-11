@@ -54,6 +54,47 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
             templateUrl:"pages/activity/activity.html",
             controller:"activityCtrl"
         })
+    //deliver
+    .state(
+        "deliver", {
+            url:"/deliver",
+            abstract:true,
+            templateUrl: "pages/deliver/menu.html",
+            controller:"DeliverCtrl"
+        })
+    .state(
+        "deliver.home",
+        {
+            url:"/home",
+            views:{
+                "deliver-home":{
+                    templateUrl:"pages/deliver/home.html",
+                    controller:"DeliverCtrl",
+                }
+            }
+        })
+    .state(
+        "deliver.admin_login",
+        {
+            url:"/admin_login",
+            views:{
+                "deliver_admin_login":{
+                    templateUrl:"pages/deliver/admin_login.html",
+                    controller:"DeliverAdminLoginCtrl",
+                }
+            }
+        })
+    .state(
+        "deliver.admin",
+        {
+            url:"/admin",
+            views:{
+                "deliver_admin":{
+                    templateUrl:"pages/deliver/admin.html",
+                    controller:"DeliverAdminCtrl",
+                }
+            }
+        })
     //yuyue
     .state(
         "yuyue",{
