@@ -3,6 +3,7 @@
 		<a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
 		<h1 class="title">小猴快递</h1>
 	</div>
+	<div class="deliver"><i class="icon ion-plus-circled energized add_button" ui-sref="deliver.new"></i></div>
 	<ion-content class="has-header deliver" direction="y">
 		<ion-refresher pulling-text="下拉刷新" pulling-icon="ion-ios-refresh-empty" on-refresh="doRefresh()"></ion-refresher>
 		<div class="deliver_item" ng-repeat="item in order.content">
@@ -18,6 +19,7 @@
 					<p>
 						<i class="icon ion-ios-telephone deliver_icon"></i>
 						<span class="title">{{item['phone']}}</span>
+						<span><button class="button button-small button-positive cancel_button" ng-if="item.cancel" ng-click="cancel(item.id)">取消订单</button></span>
 					</p>
 				</div>
 				<div class="content">

@@ -8,12 +8,21 @@
 		<div class="deliver_item" ng-repeat="item in order.content">
 			<div>
 				<div class="header">
-					<p class="title">{{item['locate']}}</p>
-					<p>{{item['sub_time']}} <span class="activity_state">{{item['state']}}</span></p>
+					<p>
+						<i class="icon ion-ios-location deliver_icon"></i>
+						<span class="title">{{item['locate']}}</span>
+						<i class="icon ion-ios-time-outline icondeliver_icon"></i>
+						<span class="title">{{item['arrival']}}</span>
+						<span class="activity_state title">{{item['state']}}</span>
+					</p>
+					<p>
+						<i class="icon ion-ios-telephone deliver_icon"></i>
+						<span class="title">{{item['phone']}}</span>
+						<span><button class="button button-small button-positive cancel-button" ng-if="item.cancel">取消订单</button></span>
+					</p>
 				</div>
 				<div class="content">
-					<p>取件时间: {{item['arrival']}}</p>
-					<p>联系方式: {{item['phone']}}</p>
+					<p>创建时间: {{item['sub_time']}}</p>
 					<p>快递重量: {{item['weight']}}</p>
 					<p>收件地点: {{item['dest']}}</p>
 					<p>短信: {{item['sms']}}</p>

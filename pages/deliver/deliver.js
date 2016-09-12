@@ -23,6 +23,9 @@ angular.module('HeraldApp')
 					var content = data['content'];
 					content.forEach(function(item) {
 						item.state = getState(item['receiving'], item['finish']);
+						if(item.state==="未接单") {
+							item.cancel = true;
+						}
 					})
 					$scope.order.content = $scope.order.content.concat(content);
 					if(content.length<10){
@@ -78,6 +81,32 @@ angular.module('HeraldApp')
 	    $ionicLoading.hide();
 	};
 
+	$scope.cancel = function(id) {
+		var data = {
+    		id: id
+    	};
+		callApi.getData("/deliver/delete", "POST", data, user.token).then(function(data){
+				if(data['code'] != 200) {
+					if(data['code'] == 302) {
+						$rootScope.lastState = "deliver.home";
+                        $state.go('login');
+					} else {
+						MessageShow.MessageShow(data['content'],2000);
+					}
+				} else {
+					MessageShow.MessageShow("取消成功",2000);
+					var content = $scope.order.content;
+					content.forEach(function(item, index) {
+						if(item.id === id) {
+							content.splice(index,1);
+							return;
+						}
+					})
+				}
+    	}).catch(function(err){
+				MessageShow.MessageShow("网络错误",2000);
+    	});
+	}
 	function init() {
 		$scope.show();
 		get_my_order(1, function(){
@@ -86,4 +115,59 @@ angular.module('HeraldApp')
 	}
 	init();
 
+}])
+
+.controller('DeliverPostCtrl', ['$scope', 'callApi', 'MessageShow', '$ionicLoading', 'User', '$state', '$rootScope', function($scope, callApi, MessageShow, $ionicLoading, User, $state, $rootScope){
+	var user = User.getCurrentUser();
+	$scope.info = {
+		name: "",
+		sms: "",
+		phone: "",
+		location: 0,
+		arrival: 0,
+		weight: 0,
+		dest :0
+	}
+	var show_information = {
+		location: ["东门","南门"],
+		arrival: ["12:20~12:40","17:40~18:00"],
+		weight: ["2kg以下","2~4kg","4kg以上"],
+		dest :["梅九大厅","梅三四大厅"]
+	};
+	$scope.show_info = show_information;
+
+	$scope.select  = function(key, value) {
+		$scope.info[key] = value;
+	};
+	$scope.submit = function(){
+		var info = $scope.info;
+		if(info.name.length<1||info.sms.length<1||info.phone.length<1) {
+			alert("信息不能为空")
+		} else {
+			var data = {
+				user_name: info.name,
+				dest: show_information['dest'][info.dest],
+				sms_txt: info.sms,
+				arrival: show_information['arrival'][info.arrival],
+				locate: show_information['location'][info.location],
+				weight: show_information['weight'][info.weight],
+				phone: info.phone
+			}
+			callApi.getData("/deliver/submit", "POST", data, user.token).then(function(data){
+				if(data['code'] != 200) {
+					if(data['code'] == 302) {
+						$rootScope.lastState = "deliver.home";
+                        $state.go('login');
+					} else {
+						MessageShow.MessageShow(data['content'],2000);
+					}
+				} else {
+					MessageShow.MessageShow("提交成功",2000);
+					$state.go("deliver.home");
+				}
+	    	}).catch(function(err){
+					MessageShow.MessageShow("网络错误",2000);
+	    	});
+		}
+	};
 }]);

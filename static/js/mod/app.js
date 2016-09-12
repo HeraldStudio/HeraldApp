@@ -74,6 +74,17 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
             }
         })
     .state(
+        "deliver.new",
+        {
+            url:"/new",
+            views:{
+                "deliver-home":{
+                    templateUrl:"pages/deliver/post.html",
+                    controller:"DeliverPostCtrl",
+                }
+            }
+        })
+    .state(
         "deliver.admin_login",
         {
             url:"/admin_login",

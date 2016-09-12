@@ -67,15 +67,15 @@ angular.module('HeraldApp')
 	      template: '正在加载...'
 	    });
 	  };
-	  $scope.hide = function(){
+	$scope.hide = function(){
 	    $ionicLoading.hide();
-	  };
+	};
 
-	  $scope.clickDetail = function(url) {
+	$scope.clickDetail = function(url) {
 	  	if(url!="") {
 	  		window.location.href = url;
 	  	}
-	  }
+	}
 
 	function getState(start_time,end_time) {
 	  	var start_date = new Date(Date.parse(start_time.replace(/-/g, "/")));
