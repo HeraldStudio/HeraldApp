@@ -111,3 +111,9 @@ $blue: rgba(56,126,245,1);
 		}
 	}
 }
+
+.deliver_admin_login {
+	.submit_button {
+		@include rounded-corners(10px);
+	}
+}

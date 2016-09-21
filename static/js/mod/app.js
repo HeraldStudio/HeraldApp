@@ -67,7 +67,7 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
         {
             url:"/home",
             views:{
-                "deliver-home":{
+                "deliver":{
                     templateUrl:"pages/deliver/home.html",
                     controller:"DeliverCtrl",
                 }
@@ -78,7 +78,7 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
         {
             url:"/new",
             views:{
-                "deliver-home":{
+                "deliver":{
                     templateUrl:"pages/deliver/post.html",
                     controller:"DeliverPostCtrl",
                 }
@@ -89,7 +89,7 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
         {
             url:"/admin_login",
             views:{
-                "deliver_admin_login":{
+                "deliver":{
                     templateUrl:"pages/deliver/admin_login.html",
                     controller:"DeliverAdminLoginCtrl",
                 }
@@ -100,7 +100,7 @@ angular.module('HeraldApp', ['ionic','HeraldApp.config','HeraldApp.services'])
         {
             url:"/admin",
             views:{
-                "deliver_admin":{
+                "deliver":{
                     templateUrl:"pages/deliver/admin.html",
                     controller:"DeliverAdminCtrl",
                 }

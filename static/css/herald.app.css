@@ -138,6 +138,16 @@
       height: 40px;
       width: 95%; }
 
+.deliver_admin_login .submit_button {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px; }
+
+.deliver_admin_login input {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px; }
+
 .activity {
   background-color: #EEEEEE;
   font-size: 14px;

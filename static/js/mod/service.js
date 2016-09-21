@@ -86,6 +86,52 @@ angular.module('HeraldApp.services',[])
 
     }
 }])
+
+
+/*
+*快递管理员模块
+*/
+.service('DeliverAdmin', ['Storage','callApi','$q',function(Storage,callApi,$q){
+    var storageKey = 'deliverAdmin';
+    var user = Storage.get(storageKey) || {}
+
+    this.login = function(username,password) {
+        data = {
+            'admin_name':username,
+            'password':password
+        }
+        loginDefer = $q.defer();
+        callApi.getData('/deliver/admin_login','POST',data)
+            .then(function(response){
+                if(response.code == 200){
+                    user.token = response.content;
+                    Storage.set(storageKey,user);
+                    loginDefer.resolve(null);
+                } else {
+                    loginDefer.resolve(response.content);
+                }
+            },function(response){
+                loginDefer.reject(response);
+            });
+
+        return loginDefer.promise;
+    };
+
+    var judgeUser = function(user){
+        for(name in user){
+            return false;
+        }
+        return true;
+    }
+    this.getCurrentUser = function() {
+        return user;
+    }
+
+    this.checkUser = function(){
+
+    }
+}])
+
 /*
 *消息显示模块
 */
