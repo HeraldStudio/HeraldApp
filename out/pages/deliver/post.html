@@ -10,33 +10,45 @@
 			<textarea placeholder="短信内容" class="my-textarea" ng-model="info.sms"></textarea>
 		
 			<label class="item item-input my-item row">
-				<span class="col col-20">用户姓名</span>
-			    <input type="text" class="my-input" ng-model="info.name">
+				<span class="label col col-20">用户姓名</span>
+			  <input type="text" class="my-input col col-70" ng-model="info.name">
 			</label>
 			<label class="item item-input my-item row">
-				<span class="col col-20">手机号码</span>
-			    <input type="text" class="my-input" ng-model="info.phone">
+				<span class="label col col-20">手机号码</span>
+			  <input type="text" class="my-input col col-70" ng-model="info.phone">
 			</label>
 			<div class="item item-input my-item row">
-				<div class="col col-20">快件地址</div>
+				<div class="label col col-20">快件地址</div>
+
 				<div class="col col-40 my-select" ng-click="select('location',0)" ng-class="{true:'selected',false:''}[info.location==0]">{{show_info['location'][0]}}</div>
-			    <div class="col col-40 my-select" ng-click="select('location',1)" ng-class="{true:'selected',false:''}[info.location==1]">{{show_info['location'][1]}}</div>
+
+			  <div class="col col-40 my-select" ng-click="select('location',1)" ng-class="{true:'selected',false:''}[info.location==1]">{{show_info['location'][1]}}</div>
+
 			</div>
 			<div class="item item-input my-item row">
-				<div class="col col-20">快件重量</div>
-			    <div class="col col-26 my-select" ng-class="{true:'selected',false:''}[info.weight==0]" ng-click="select('weight',0)">{{show_info['weight'][0]}}</div>
-			    <div class="col col-26 my-select" ng-class="{true:'selected',false:''}[info.weight==1]" ng-click="select('weight',1)">{{show_info['weight'][1]}}</div>
-			    <div class="col col-26 my-select" ng-class="{true:'selected',false:''}[info.weight==2]" ng-click="select('weight',2)">{{show_info['weight'][2]}}</div>
+				<div class="label col col-20">快件重量</div>
+
+				<div class="col col-26 my-select" ng-class="{true:'selected',false:''}[info.weight==0]" ng-click="select('weight',0)">{{show_info['weight'][0]}}</div>
+
+				<div class="col col-26 my-select" ng-class="{true:'selected',false:''}[info.weight==1]" ng-click="select('weight',1)">{{show_info['weight'][1]}}</div>
+
+				<div class="col col-26 my-select" ng-class="{true:'selected',false:''}[info.weight==2]" ng-click="select('weight',2)">{{show_info['weight'][2]}}</div>
+
 			</div>
 			<div class="item item-input my-item row">
-				<div class="col col-20">取回地点</div>
-			    <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.dest==0]" ng-click="select('dest',0)">{{show_info['dest'][0]}}</div>
-			    <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.dest==1]" ng-click="select('dest',1)">{{show_info['dest'][1]}}</div>
+				<div class="label col col-20">取回地点</div>
+
+			  <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.dest==0]" ng-click="select('dest',0)">{{show_info['dest'][0]}}</div>
+
+			  <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.dest==1]" ng-click="select('dest',1)">{{show_info['dest'][1]}}</div>
+
 			</div>
 			<div class="item item-input my-item row">
-				<div class="col col-20">取回时间</div>
-			    <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.arrival==0]" ng-click="select('arrival',0)">{{show_info['arrival'][0]}}</div>
-			    <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.arrival==1]" ng-click="select('arrival',1)">{{show_info['arrival'][1]}}</div>
+				<div class="label col col-20">取回时间</div>
+
+			  <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.arrival==0]" ng-click="select('arrival',0)">{{show_info['arrival'][0]}}</div>
+
+			  <div class="col col-40 my-select" ng-class="{true:'selected',false:''}[info.arrival==1]" ng-click="select('arrival',1)">{{show_info['arrival'][1]}}</div>
 			</div>
 
 			<button class="submit_button button button-positive" ng-click="submit()">提交</button>

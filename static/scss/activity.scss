@@ -12,7 +12,6 @@ $blue: rgba(56,126,245,1);
 
 .activity {
 	background-color: $grey-back;
-	font-size: 14px;
 	color: rgba(0,0,0,0.7);
 
 	.activity_item {
@@ -24,7 +23,7 @@ $blue: rgba(56,126,245,1);
 		.header {
 			.title {
 				color: $blue;
-				font-size: 16px;
+				font-size: 1.2rem;
 			}
 			.activity_state {
 				float: right;

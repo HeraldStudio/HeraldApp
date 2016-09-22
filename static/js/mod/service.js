@@ -240,15 +240,25 @@ angular.module('HeraldApp.services',[])
         var final_url = ENV.api+url;//+'?&callback=JSON_CALLBACK';
         data = data || null;
         type = type || null;
+        var token_key = "token";
+        var token_value = null;
+        if(typeof token === "string") {
+            token_value = token;
+        } else {
+            for(var i in token) {
+                token_key = i;
+                token_value = token[i];
+            }
+        }
         var config = {
             method:method,
             url:final_url,
             headers:{
-                'token':token,
                 // 'Content-Type':'application/x-www-form-urlencoded'
             },
             timeout:10000
-        }
+        };
+        config['headers'][token_key] = token_value;
         // $http.defaults.headers.common['Token'] = token;
         if(method=="GET"){
             config['params'] = data;

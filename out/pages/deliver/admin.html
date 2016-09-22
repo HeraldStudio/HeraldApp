@@ -1,11 +1,36 @@
 <ion-view>
 	<div class="bar bar-header bar-positive">
-		<a class="button  button-clear ion-chevron-left" ui-sref="index.home" style="font-size:27px;"></a>
-		<h1 class="title">小猴快递</h1>
+		<h1 class="title">快递管理员</h1>
 	</div>
-	<ion-content class="has-header activity" direction="y">
+	<ion-content class="has-header deliver" direction="y">
 		<ion-refresher pulling-text="下拉刷新" pulling-icon="ion-ios-refresh-empty" on-refresh="doRefresh()"></ion-refresher>
-		<div>admin</div>
+		<div class="deliver_item" ng-repeat="item in order.content">
+			<div>
+				<div class="header">
+					<p>
+						<i class="icon ion-ios-location deliver_icon"></i>
+						<span class="title">{{item['locate']}}</span>
+						<i class="icon ion-ios-time-outline icondeliver_icon"></i>
+						<span class="title">{{item['arrival']}}</span>
+						<span class="activity_state title">{{item.state.state}}</span>
+					</p>
+					<p>
+						<i class="icon ion-ios-telephone deliver_icon"></i>
+						<span class="title">{{item['phone']}}</span>
+						<span><button class="button button-small button-positive cancel_button" ng-if="item.state.is_operate" ng-click="changeState(item)">{{item.state.name}}</button></span>
+					</p>
+				</div>
+				<div class="content">
+					<p>创建时间: {{item['sub_time']}}</p>
+					<p>快递详情: {{item['weight']}}&nbsp;&nbsp;&nbsp;&nbsp;{{item['dest']}}</p>
+					<p>短信内容: {{item['sms']}}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="no_content_show deliver_item" ng-if="order.no_content">
+			<p>暂时没有订单</p>
+		</div>
 
 		<ion-infinite-scroll
 		    on-infinite="addItems()"

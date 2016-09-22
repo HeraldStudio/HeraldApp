@@ -15,13 +15,23 @@ $my-grey:rgb(238,238,238);
 $my-white:#FFFFFF;
 $grey-back:#EEEEEE;
 $blue: rgba(56,126,245,1);
+
+
+
 .deliver {
 	background-color: $grey-back;
-	font-size: 14px;
+	@media all and (min-device-width: 320px) {
+		font-size: 12px;
+	}
+	@media all and (min-device-width: 360px) {
+		font-size: 14px;
+	}
+	@media all and (min-device-width: 400px) {
+		font-size: 16px;
+	}
 	color: rgba(0,0,0,0.7);
 	.add_button {
 		position: fixed;
-		top: 500px;
 		right:30px;
 		font-size: 40px;
 		width: 40px;
@@ -35,11 +45,14 @@ $blue: rgba(56,126,245,1);
 		.deliver_icon {
 			margin-right:10px;
 		}
+		p {
+				margin-bottom: 5px;
+		}
 		.header {
 			.title {
 				color: $blue;
-				font-size: 16px;
 				margin-right: 10px;
+				font-size: 1.15rem;
 			}
 			.activity_state {
 				float: right;
@@ -50,10 +63,12 @@ $blue: rgba(56,126,245,1);
 				@include rounded-corners(5px);
 				float: right;
 				margin-right: 15px;
-				line-height: 20px;
+				padding-top: 0px;
+				padding-bottom: 0px;
 			}
 		}
 		.content {
+			
 		}
 	}
 }
@@ -72,13 +87,23 @@ $blue: rgba(56,126,245,1);
 		span {
 			color: rgba(0,0,0,0.7);
 		}
+		.label {
+			overflow: hidden;
+		}
 		.my-item {
 			border:0px;
-			font-size:14px;
+			padding-left: 0px;
+			
+			@media all and (max-device-width: 375px) {
+				font-size: 14px;
+			}
+			@media all and (max-device-width: 320px) {
+				font-size: 12px;
+			}
 		}
 		.my-input {
 			@include rounded-corners(5px);
-			// margin-left: 10px;
+			margin-left: 5px;
 			margin-top:10px;
 			// padding-left:10px;
 			border-width: 1px;
@@ -115,5 +140,8 @@ $blue: rgba(56,126,245,1);
 .deliver_admin_login {
 	.submit_button {
 		@include rounded-corners(10px);
+	}
+	label {
+		@include rounded-corners(5px);
 	}
 }

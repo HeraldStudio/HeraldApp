@@ -3,7 +3,8 @@ angular.module('HeraldApp')
 	var order = {
 		page: 1,
 		scrollState: true,
-		content:[]
+		content:[],
+		no_content:false
 	}
 	$scope.order = order;
 	var user = User.getCurrentUser();
@@ -14,8 +15,9 @@ angular.module('HeraldApp')
     	callApi.getData("/deliver/query", "POST", data, user.token).then(function(data){
 				if(data['code'] != 200) {
 					if(data['code'] == 302) {
+						MessageShow.MessageShow("请先登录",1000);
 						$rootScope.lastState = "deliver.home";
-                        $state.go('login');
+            $state.go('login');
 					} else {
 						MessageShow.MessageShow(data['content'],2000);
 					}
@@ -32,6 +34,11 @@ angular.module('HeraldApp')
 						$scope.order.scrollState = false;
 					}
 				}
+				if($scope.order.content.length === 0) {
+            $scope.order.no_content = true;
+        } else {
+            $scope.order.no_content = false;
+        }
 				if(typeof callback === "function"){
 					callback(data['code']);
 				}
@@ -44,15 +51,15 @@ angular.module('HeraldApp')
 
     };
     function getState(is_receive,is_finish) {
-	  	if(!is_receive && !is_finish) {
-	  		return "未接单";
-	  	} else if(is_receive && !is_finish){
-	  		return "派送中";
-	  	} else if(is_receive && is_finish){
-	  		return "已完成";
-	  	} else {
-	  		return "未知";
-	  	}
+	  	if(is_finish) {
+            return "已完成";
+        } else if(is_receive && !is_finish){
+            return "派送中";
+        } else if(!is_receive && !is_finish){
+            return "未接单";
+        } else {
+            return "未知";
+        }
 	}
     $scope.doRefresh = function() {
     	$scope.order.page = 1;
@@ -108,10 +115,16 @@ angular.module('HeraldApp')
     	});
 	}
 	function init() {
-		$scope.show();
-		get_my_order(1, function(){
-			$scope.hide();
-		});
+		$scope.height = window.screen.height*0.75;
+		if(!user.token) {
+			MessageShow.MessageShow("请先登录",1000);
+      $state.go('login');
+		} else {
+			$scope.show();
+			get_my_order(1, function(){
+				$scope.hide();
+			});
+		}
 	}
 	init();
 
