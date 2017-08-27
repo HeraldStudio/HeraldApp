@@ -22,7 +22,7 @@ var ngmin     = require('gulp-ngmin');
 
 var paths = {
     sass:['./static/scss/**/*.scss'],
-    js:['./static/js/mod/*.js','./pages/**/*.js'],
+    js:['./static/js/*.js','./pages/**/*.js'],
     cssfile:['./static/css/herald.app.min.css','./static/css/ionic.min.css'],
     jsfile:['./static/js/ionic.bundle.min.js','./static/js/angular-resource.min.js'],
     htmlfile:['./**/*.html','!./node_modules/**/*.html','!./out/**/*.html','!index.html'],
